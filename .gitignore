@@ -1,0 +1,8 @@
+# Secrets
+.env
+.vscode/
+
+# Python embedding service
+embedding-service/venv/
+embedding-service/__pycache__/
+embedding-service/*.pyc

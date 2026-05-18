@@ -1,0 +1,27 @@
+version: '3.9'
+
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: vaultai-redis
+    ports:
+      - "6381:6379"
+    networks:
+      - vaultai-net
+
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: vaultai-qdrant
+    ports:
+      - "6335:6333"
+    volumes:
+      - qdrantdata:/qdrant/storage
+    networks:
+      - vaultai-net
+
+volumes:
+  qdrantdata:
+
+networks:
+  vaultai-net:
+    driver: bridge
