@@ -31,6 +31,10 @@ export default function Dashboard() {
   const [user, setUser] = useState<UserProfile | null>(null);
   const [repos, setRepos] = useState<ConnectedRepo[]>([]);
   const router = useRouter();
+  const logout = () => {
+    Cookies.remove('vault_token');
+    router.push('/');
+  };
   const refreshRepo = async (repoId: number) => {
     try {
       await api.post(`/api/repos/${repoId}/refresh`);
@@ -81,6 +85,18 @@ export default function Dashboard() {
               className="bg-white text-gray-900 text-sm font-medium px-4 py-2 rounded-lg hover:bg-gray-100 transition"
             >
               + Connect Repo
+            </button>
+            <button
+              onClick={() => router.push('/analytics')}
+              className="bg-gray-800 text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-gray-700 transition"
+            >
+              Analytics
+            </button>
+            <button
+              onClick={logout}
+              className="bg-red-900 text-red-200 text-sm font-medium px-4 py-2 rounded-lg hover:bg-red-800 transition"
+            >
+              Logout
             </button>
           </div>
         </div>
