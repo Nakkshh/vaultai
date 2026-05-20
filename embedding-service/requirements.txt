@@ -1,0 +1,14 @@
+fastapi
+uvicorn
+qdrant-client
+rank-bm25
+psycopg2-binary
+python-dotenv
+sentence-transformers
+tree-sitter==0.21.3
+tree-sitter-languages==1.10.2
+redis
+requests
+prometheus-fastapi-instrumentator
+tiktoken
+google-genai

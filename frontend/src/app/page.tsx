@@ -9,7 +9,7 @@ export default function Home() {
         </p>
 
         <a
-          href="http://localhost:8085/oauth2/authorization/github"
+          href={`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8085'}/oauth2/authorization/github`}
           className="inline-block bg-white text-gray-900 font-semibold px-6 py-3 rounded-lg hover:bg-gray-100 transition"
         >
           Login with GitHub
