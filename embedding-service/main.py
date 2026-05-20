@@ -12,6 +12,9 @@ load_dotenv()
 
 app = FastAPI(title="VaultAI Embedding Service")
 
+from prometheus_fastapi_instrumentator import Instrumentator
+Instrumentator().instrument(app).expose(app)
+
 
 @app.on_event("startup")
 def startup_event():

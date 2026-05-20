@@ -15,10 +15,19 @@ VECTOR_SIZE = 3072
 
 
 def get_client() -> QdrantClient:
-    return QdrantClient(
-        host=os.getenv("QDRANT_HOST", "localhost"),
-        port=int(os.getenv("QDRANT_PORT", 6335))
-    )
+    api_key = os.getenv("QDRANT_API_KEY")
+    host = os.getenv("QDRANT_HOST", "localhost")
+    port = int(os.getenv("QDRANT_PORT", 6335))
+
+    if api_key:
+        return QdrantClient(
+            host=host,
+            port=port,
+            api_key=api_key,
+            https=True,
+            check_compatibility=False
+        )
+    return QdrantClient(host=host, port=port, check_compatibility=False)
 
 
 def ensure_collection():

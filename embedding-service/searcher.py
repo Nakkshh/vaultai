@@ -13,8 +13,20 @@ QDRANT_HOST = os.getenv("QDRANT_HOST", "localhost")
 QDRANT_PORT = int(os.getenv("QDRANT_PORT", 6335))
 
 
-def get_qdrant_client():
-    return QdrantClient(host=QDRANT_HOST, port=QDRANT_PORT)
+def get_client() -> QdrantClient:
+    api_key = os.getenv("QDRANT_API_KEY")
+    host = os.getenv("QDRANT_HOST", "localhost")
+    port = int(os.getenv("QDRANT_PORT", 6335))
+
+    if api_key:
+        return QdrantClient(
+            host=host,
+            port=port,
+            api_key=api_key,
+            https=True,
+            check_compatibility=False
+        )
+    return QdrantClient(host=host, port=port, check_compatibility=False)
 
 
 def hybrid_search(query: str, repo_ids: List[int], top_k: int = 10) -> List[Dict]:
