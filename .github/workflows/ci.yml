@@ -16,10 +16,12 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
         with:
-          java-version: '17'
+          java-version: '21'
           distribution: 'temurin'
-      - name: Build
-        run: ./mvnw clean package -DskipTests
+      - name: Make mvnw executable
+        run: chmod +x mvnw
+      - name: Build and Test
+        run: ./mvnw test -Dspring.datasource.url=jdbc:h2:mem:testdb
 
   embedding:
     runs-on: ubuntu-latest
