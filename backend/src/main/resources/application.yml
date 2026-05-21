@@ -7,8 +7,8 @@ spring:
 
   data:
     redis:
-      host: localhost
-      port: 6381
+      host: ${SPRING_DATA_REDIS_HOST:localhost}
+      port: ${SPRING_DATA_REDIS_PORT:6381}
 
   datasource:
     url: ${DATABASE_URL}
@@ -51,10 +51,10 @@ app:
   jwt:
     secret: ${JWT_SECRET}
     expiration: 86400000
-  frontend-url: http://localhost:3005
+  frontend-url: ${APP_FRONTEND_URL:http://localhost:3005}
   github:
     api-base: https://api.github.com
-  embedding-service-url: http://localhost:8002
+  embedding-service-url: ${APP_EMBEDDING_SERVICE_URL:http://localhost:8002}
 
 management:
   endpoints:
