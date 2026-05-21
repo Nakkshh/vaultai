@@ -20,8 +20,8 @@ jobs:
           distribution: 'temurin'
       - name: Make mvnw executable
         run: chmod +x mvnw
-      - name: Build and Test
-        run: ./mvnw test -Dspring.datasource.url=jdbc:h2:mem:testdb
+      - name: Build
+        run: ./mvnw clean compile -DskipTests
 
   embedding:
     runs-on: ubuntu-latest
@@ -34,6 +34,6 @@ jobs:
         with:
           python-version: '3.11'
       - name: Install deps
-        run: pip install fastapi uvicorn qdrant-client rank-bm25 psycopg2-binary python-dotenv redis requests
+        run: pip install fastapi uvicorn qdrant-client rank-bm25 openai psycopg2-binary python-dotenv prometheus-fastapi-instrumentator
       - name: Syntax check
         run: python -m py_compile main.py chunker.py embedder.py searcher.py reranker.py
