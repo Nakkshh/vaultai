@@ -1,9 +1,9 @@
 'use client';
-import { useEffect } from 'react';
+import { useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Cookies from 'js-cookie';
 
-export default function AuthCallback() {
+function AuthCallbackInner() {
   const router = useRouter();
   const params = useSearchParams();
 
@@ -21,5 +21,17 @@ export default function AuthCallback() {
     <div className="min-h-screen flex items-center justify-center">
       <p className="text-gray-500">Authenticating...</p>
     </div>
+  );
+}
+
+export default function AuthCallback() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-gray-500">Loading...</p>
+      </div>
+    }>
+      <AuthCallbackInner />
+    </Suspense>
   );
 }
