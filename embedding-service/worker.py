@@ -21,10 +21,17 @@ logger = logging.getLogger(__name__)
 
 REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
 REDIS_PORT = int(os.getenv("REDIS_PORT", 6381))
+REDIS_PASSWORD = os.getenv("REDIS_PASSWORD", None)
 GITHUB_API = "https://api.github.com"
 INDEX_QUEUE = "vaultai:index_queue"
 
-r = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, decode_responses=True)
+r = redis.Redis(
+    host=REDIS_HOST,
+    port=REDIS_PORT,
+    password=REDIS_PASSWORD,
+    decode_responses=True,
+    ssl=True if REDIS_PASSWORD else False
+)
 
 SUPPORTED_EXTENSIONS = {
     ".java", ".py", ".js", ".ts", ".jsx", ".tsx",
