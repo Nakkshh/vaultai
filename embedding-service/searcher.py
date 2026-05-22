@@ -13,7 +13,7 @@ QDRANT_HOST = os.getenv("QDRANT_HOST", "localhost")
 QDRANT_PORT = int(os.getenv("QDRANT_PORT", 6335))
 
 
-def get_client() -> QdrantClient:
+def get_qdrant_client() -> QdrantClient:
     api_key = os.getenv("QDRANT_API_KEY")
     host = os.getenv("QDRANT_HOST", "localhost")
     port = int(os.getenv("QDRANT_PORT", 6335))
