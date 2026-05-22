@@ -4,7 +4,8 @@ from typing import List, Dict
 from qdrant_client import QdrantClient
 from qdrant_client.models import (
     Distance, VectorParams, PointStruct,
-    Filter, FieldCondition, MatchValue
+    Filter, FieldCondition, MatchValue,
+    PayloadSchemaType
 )
 from dotenv import load_dotenv
 
@@ -32,15 +33,39 @@ def get_client() -> QdrantClient:
 
 def ensure_collection():
     client = get_client()
-    names = [c.name for c in client.get_collections().collections]
+    collections = client.get_collections().collections
+    names = [c.name for c in collections]
+
     if COLLECTION_NAME not in names:
         client.create_collection(
             collection_name=COLLECTION_NAME,
-            vectors_config=VectorParams(size=VECTOR_SIZE, distance=Distance.COSINE)
+            vectors_config=VectorParams(
+                size=VECTOR_SIZE,
+                distance=Distance.COSINE
+            )
         )
         print(f"Created Qdrant collection: {COLLECTION_NAME}")
     else:
         print(f"Qdrant collection already exists: {COLLECTION_NAME}")
+
+    # Always ensure payload indexes exist
+    try:
+        client.create_payload_index(
+            collection_name=COLLECTION_NAME,
+            field_name="repo_id",
+            field_schema=PayloadSchemaType.INTEGER
+        )
+    except Exception:
+        pass
+
+    try:
+        client.create_payload_index(
+            collection_name=COLLECTION_NAME,
+            field_name="file_id",
+            field_schema=PayloadSchemaType.INTEGER
+        )
+    except Exception:
+        pass
 
 
 def upsert_chunks(chunks: List[Dict], embeddings: List[List[float]],
@@ -48,9 +73,11 @@ def upsert_chunks(chunks: List[Dict], embeddings: List[List[float]],
     client = get_client()
     points = []
     point_ids = []
+
     for chunk, embedding in zip(chunks, embeddings):
         point_id = str(uuid.uuid4())
         point_ids.append(point_id)
+
         points.append(PointStruct(
             id=point_id,
             vector=embedding,
@@ -63,9 +90,15 @@ def upsert_chunks(chunks: List[Dict], embeddings: List[List[float]],
                 "end_line": chunk["end_line"],
             }
         ))
+
     if points:
-        client.upsert(collection_name=COLLECTION_NAME, points=points)
+        client.upsert(
+            collection_name=COLLECTION_NAME,
+            points=points
+        )
+
     return point_ids
+
 
 def delete_points_by_file(file_id: int):
     client = get_client()
